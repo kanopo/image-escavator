@@ -1,12 +1,44 @@
-name: Build and Release Executable
+name: Build and Release Executable with Auto-Increment Tag
 
 on:
   push:
-    tags:
-      - "*" # Trigger the workflow when a new tag is pushed
+    branches:
+      - main
 
 jobs:
+  prepare-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.new_tag.outputs.tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Fetch Tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+      - name: Determine New Tag
+        id: new_tag
+        run: |
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "Latest tag: $latest_tag"
+          new_tag="${latest_tag%.*}.$((${latest_tag##*.}+1))"
+          echo "New tag: $new_tag"
+          echo "::set-output name=tag::$new_tag"
+
+      - name: Create and Push New Tag
+        run: |
+          new_tag=${{ steps.new_tag.outputs.tag }}
+          git tag $new_tag
+          git push origin $new_tag
+
   build-windows:
+    needs: prepare-tag
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -32,6 +64,7 @@ jobs:
           path: dist/*.exe
 
   build-linux:
+    needs: prepare-tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -57,6 +90,7 @@ jobs:
           path: dist/main
 
   build-macos:
+    needs: prepare-tag
     runs-on: macos-latest
     steps:
       - name: Checkout repository
