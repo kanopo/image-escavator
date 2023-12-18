@@ -10,27 +10,27 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # PyInstaller should run in a Windows environment for .exe
+    runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'  # Set the Python version as per your requirement
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller  # Install PyInstaller
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
 
-    - name: Build Executable
-      run: pyinstaller --onefile your_script_name.py  # Replace with your script's name
+      - name: Build Executable
+        run: pyinstaller --onefile main.py
 
-    - name: Upload Executable
-      uses: actions/upload-artifact@v2
-      with:
-        name: image-escavator  # Name the output as you like
-        path: dist/*.exe
+      - name: Upload Executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: image-escavator
+          path: dist/*.exe
