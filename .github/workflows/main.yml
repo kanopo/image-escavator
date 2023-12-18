@@ -35,7 +35,7 @@ jobs:
         run: |
           new_tag=${{ steps.new_tag.outputs.tag }}
           git tag $new_tag
-          git push https://${{ secrets.SECRET }}@github.com/kanopo/image-escavator.git $new_tag
+          git push https://${{ secrets.TOKEN }}@github.com/kanopo/image-escavator.git $new_tag
 
   build-windows:
     needs: prepare-tag
