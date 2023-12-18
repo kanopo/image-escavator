@@ -108,6 +108,9 @@ jobs:
           prerelease: false
           body: "Description of the release"
 
+      - name: Print current dir
+        run: pwd
+
       - name: Upload Windows Executable
         uses: actions/upload-release-asset@v1
         env:
