@@ -16,8 +16,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "dmitri.ollari@protonmail.com"
+          git config --local user.name "kanopo"
 
       - name: Fetch Tags
         run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
