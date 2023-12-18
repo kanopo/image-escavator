@@ -1,5 +1,6 @@
 import io
 import os
+import shutil
 import sys
 
 import fitz  # PyMuPDF
@@ -41,3 +42,6 @@ if __name__ == "__main__":
     pdf_file = sys.argv[1]
     output_dir = sys.argv[2]
     extract_images_from_pdf(pdf_file, output_dir)
+
+    shutil.make_archive(output_dir, "zip", output_dir)
+    shutil.rmtree(output_dir)
